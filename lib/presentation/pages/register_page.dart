@@ -1,10 +1,10 @@
 import 'package:fic_bloc2/bloc/register/register_bloc.dart';
 import 'package:fic_bloc2/data/models/request/register_request_model.dart';
-import 'package:fic_bloc2/presentation/login_page.dart';
-import 'package:fic_bloc2/presentation/widgets/fic_button.dart';
-import 'package:fic_bloc2/presentation/widgets/page_title.dart';
-import 'package:fic_bloc2/presentation/widgets/text_input.dart';
-import 'package:fic_bloc2/presentation/widgets/text_link.dart';
+import 'package:fic_bloc2/presentation/pages/login_page.dart';
+import 'package:fic_bloc2/shared/widgets/fic_button.dart';
+import 'package:fic_bloc2/shared/widgets/page_title.dart';
+import 'package:fic_bloc2/shared/widgets/text_input.dart';
+import 'package:fic_bloc2/shared/widgets/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,15 +49,18 @@ class _RegisterPageState extends State<RegisterPage> {
             TextInput(
               label: 'Name',
               controller: nameController,
+              maxLines: 1,
             ),
             TextInput(
               label: 'Email',
               controller: emailController,
+              maxLines: 1,
             ),
             TextInput(
               label: 'Password',
               isPassword: true,
               controller: passwordController,
+              maxLines: 1,
             ),
             const SizedBox(height: 25.0),
             BlocConsumer<RegisterBloc, RegisterState>(

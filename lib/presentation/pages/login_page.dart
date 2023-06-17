@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:fic_bloc2/bloc/login/login_bloc.dart';
 import 'package:fic_bloc2/data/data_sources/local_datasources.dart';
 import 'package:fic_bloc2/data/models/request/login_request_model.dart';
-import 'package:fic_bloc2/presentation/home_page.dart';
-import 'package:fic_bloc2/presentation/register_page.dart';
-import 'package:fic_bloc2/presentation/widgets/fic_button.dart';
-import 'package:fic_bloc2/presentation/widgets/page_title.dart';
-import 'package:fic_bloc2/presentation/widgets/text_input.dart';
-import 'package:fic_bloc2/presentation/widgets/text_link.dart';
+import 'package:fic_bloc2/presentation/pages/home_page.dart';
+import 'package:fic_bloc2/presentation/pages/register_page.dart';
+import 'package:fic_bloc2/shared/widgets/fic_button.dart';
+import 'package:fic_bloc2/shared/widgets/page_title.dart';
+import 'package:fic_bloc2/shared/widgets/text_input.dart';
+import 'package:fic_bloc2/shared/widgets/text_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,16 +32,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void checkAuth() async {
-    await Future.delayed(const Duration(seconds: 2));
-    final auth = await LocalDataSources().getToken();
-    if (auth.isNotEmpty) {
-      log("Login Token is Exist, Navigate to HomePage");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      log("Token is Empty");
+    try {
+      final auth = await LocalDataSources().getToken();
+      if (auth.isNotEmpty) {
+        log("Login Token is Exist, Navigate to HomePage");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        log("Token is Empty");
+      }
+    } catch (e) {
+      log("Error: $e");
     }
   }
 
@@ -64,11 +67,13 @@ class _LoginPageState extends State<LoginPage> {
             const PageTitle(text: 'Login'),
             TextInput(
               label: 'Email',
+              maxLines: 1,
               controller: emailController,
             ),
             TextInput(
               label: 'Password',
               isPassword: true,
+              maxLines: 1,
               controller: passwordController,
             ),
             const SizedBox(height: 25),
