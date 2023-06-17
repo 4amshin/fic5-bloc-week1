@@ -1,19 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:fic_bloc2/bloc/add_product/add_product_bloc.dart';
-import 'package:fic_bloc2/bloc/products/products_bloc.dart';
-import 'package:fic_bloc2/data/models/request/product_request_model.dart';
-import 'package:fic_bloc2/presentation/widgets/add_product_page/camera_page.dart';
-import 'package:fic_bloc2/presentation/widgets/add_product_page/pick_image.dart';
-import 'package:fic_bloc2/shared/widgets/text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:fic_bloc2/bloc/add_product/add_product_bloc.dart';
+import 'package:fic_bloc2/bloc/products/products_bloc.dart';
+import 'package:fic_bloc2/data/models/request/product_request_model.dart';
+import 'package:fic_bloc2/data/models/response/product_response_model.dart';
+import 'package:fic_bloc2/presentation/widgets/add_product_page/camera_page.dart';
+import 'package:fic_bloc2/presentation/widgets/add_product_page/pick_image.dart';
+import 'package:fic_bloc2/shared/widgets/text_input.dart';
+
 class AddProductPage extends StatefulWidget {
-  const AddProductPage({Key? key}) : super(key: key);
+  final bool? isEdit;
+  final ProductResponseModel? product;
+  const AddProductPage({
+    Key? key,
+    this.isEdit,
+    this.product,
+  }) : super(key: key);
 
   @override
   State<AddProductPage> createState() => _AddProductPageState();
@@ -49,6 +58,12 @@ class _AddProductPageState extends State<AddProductPage> {
     titleController = TextEditingController();
     priceController = TextEditingController();
     descriptionController = TextEditingController();
+
+    if (widget.isEdit!) {
+      titleController?.text = widget.product!.title!;
+      priceController?.text = widget.product!.price!.toString();
+      descriptionController?.text = widget.product!.description!;
+    }
     super.initState();
   }
 
@@ -106,7 +121,7 @@ class _AddProductPageState extends State<AddProductPage> {
           orElse: () {
             return Scaffold(
               appBar: AppBar(
-                title: const Text("Add Product"),
+                title: Text(widget.isEdit! ? "Update Product" : "Add Product"),
                 leading: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(
@@ -124,8 +139,13 @@ class _AddProductPageState extends State<AddProductPage> {
                       radius: 90,
                       child: picture != null
                           ? Image.file(File(picture!.path))
-                          : const Icon(
-                              Icons.image,
+                          : const SizedBox(
+                              height: 110,
+                              width: 110,
+                              child: Icon(
+                                Icons.image,
+                                color: Colors.white,
+                              ),
                             ),
                       onCamera: () async {
                         log("Open Camera....");
