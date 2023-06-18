@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:dartz/dartz.dart';
 import 'package:fic_bloc2/data/models/request/product_request_model.dart';
 import 'package:fic_bloc2/data/models/response/product_response_model.dart';
+import 'package:fic_bloc2/data/models/response/upload_image_response_model.dart';
 import 'package:http/http.dart' as http;
 
 class ProductDataSources {
@@ -40,8 +43,6 @@ class ProductDataSources {
     }
   }
 
-  // https://api.escuelajs.co/api/v1/products/?offset=0&limit=5
-
   Future<Either<String, ProductResponseModel>> addProduct(
       ProductRequestModel model) async {
     const baseUrl = 'https://api.escuelajs.co/api/v1/products/';
@@ -73,6 +74,34 @@ class ProductDataSources {
       return Right(ProductResponseModel.fromJson(response.body));
     } else {
       return const Left("Failed Updating Data");
+    }
+  }
+
+  Future<Either<String, UploadImageResponseModel>> uploadImage(
+    XFile image,
+  ) async {
+    const baseUrl = "https://api.escuelajs.co/api/v1/files/upload";
+    final request = http.MultipartRequest('POST', Uri.parse(baseUrl));
+
+    final bytes = await image.readAsBytes();
+
+    final multiPartFile = http.MultipartFile.fromBytes(
+      'file',
+      bytes,
+      filename: image.name,
+    );
+
+    request.files.add(multiPartFile);
+
+    http.StreamedResponse response = await request.send();
+
+    final Uint8List responseList = await response.stream.toBytes();
+    final String responseData = String.fromCharCodes(responseList);
+
+    if (response.statusCode == 201) {
+      return Right(UploadImageResponseModel.fromJson(jsonDecode(responseData)));
+    } else {
+      return const Left("Failed Upload Image");
     }
   }
 }

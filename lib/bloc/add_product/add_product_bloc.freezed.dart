@@ -16,20 +16,22 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AddProductEvent {
+  XFile get image => throw _privateConstructorUsedError;
   ProductRequestModel get model => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ProductRequestModel model) addProduct,
+    required TResult Function(XFile image, ProductRequestModel model)
+        addProduct,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(ProductRequestModel model)? addProduct,
+    TResult? Function(XFile image, ProductRequestModel model)? addProduct,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ProductRequestModel model)? addProduct,
+    TResult Function(XFile image, ProductRequestModel model)? addProduct,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -61,7 +63,7 @@ abstract class $AddProductEventCopyWith<$Res> {
           AddProductEvent value, $Res Function(AddProductEvent) then) =
       _$AddProductEventCopyWithImpl<$Res, AddProductEvent>;
   @useResult
-  $Res call({ProductRequestModel model});
+  $Res call({XFile image, ProductRequestModel model});
 }
 
 /// @nodoc
@@ -77,9 +79,14 @@ class _$AddProductEventCopyWithImpl<$Res, $Val extends AddProductEvent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? image = null,
     Object? model = null,
   }) {
     return _then(_value.copyWith(
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as XFile,
       model: null == model
           ? _value.model
           : model // ignore: cast_nullable_to_non_nullable
@@ -96,7 +103,7 @@ abstract class _$$_AddProductCopyWith<$Res>
       __$$_AddProductCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({ProductRequestModel model});
+  $Res call({XFile image, ProductRequestModel model});
 }
 
 /// @nodoc
@@ -110,10 +117,15 @@ class __$$_AddProductCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? image = null,
     Object? model = null,
   }) {
     return _then(_$_AddProduct(
-      null == model
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
+              as XFile,
+      model: null == model
           ? _value.model
           : model // ignore: cast_nullable_to_non_nullable
               as ProductRequestModel,
@@ -124,14 +136,16 @@ class __$$_AddProductCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AddProduct implements _AddProduct {
-  const _$_AddProduct(this.model);
+  const _$_AddProduct({required this.image, required this.model});
 
+  @override
+  final XFile image;
   @override
   final ProductRequestModel model;
 
   @override
   String toString() {
-    return 'AddProductEvent.addProduct(model: $model)';
+    return 'AddProductEvent.addProduct(image: $image, model: $model)';
   }
 
   @override
@@ -139,11 +153,12 @@ class _$_AddProduct implements _AddProduct {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AddProduct &&
+            (identical(other.image, image) || other.image == image) &&
             (identical(other.model, model) || other.model == model));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, model);
+  int get hashCode => Object.hash(runtimeType, image, model);
 
   @JsonKey(ignore: true)
   @override
@@ -154,27 +169,28 @@ class _$_AddProduct implements _AddProduct {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(ProductRequestModel model) addProduct,
+    required TResult Function(XFile image, ProductRequestModel model)
+        addProduct,
   }) {
-    return addProduct(model);
+    return addProduct(image, model);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(ProductRequestModel model)? addProduct,
+    TResult? Function(XFile image, ProductRequestModel model)? addProduct,
   }) {
-    return addProduct?.call(model);
+    return addProduct?.call(image, model);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(ProductRequestModel model)? addProduct,
+    TResult Function(XFile image, ProductRequestModel model)? addProduct,
     required TResult orElse(),
   }) {
     if (addProduct != null) {
-      return addProduct(model);
+      return addProduct(image, model);
     }
     return orElse();
   }
@@ -209,8 +225,12 @@ class _$_AddProduct implements _AddProduct {
 }
 
 abstract class _AddProduct implements AddProductEvent {
-  const factory _AddProduct(final ProductRequestModel model) = _$_AddProduct;
+  const factory _AddProduct(
+      {required final XFile image,
+      required final ProductRequestModel model}) = _$_AddProduct;
 
+  @override
+  XFile get image;
   @override
   ProductRequestModel get model;
   @override

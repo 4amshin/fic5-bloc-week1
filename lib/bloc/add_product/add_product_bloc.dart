@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:fic_bloc2/data/data_sources/product_datasources.dart';
 import 'package:fic_bloc2/data/models/request/product_request_model.dart';
 import 'package:fic_bloc2/data/models/response/product_response_model.dart';
@@ -19,10 +20,20 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
     Emitter<AddProductState> emit,
   ) async {
     emit(const _Loading());
-    final result = await dataSources.addProduct(event.model);
-    result.fold(
+    final uploadImage = await dataSources.uploadImage(event.image);
+    uploadImage.fold(
       (error) => emit(_Error(message: error)),
-      (data) => emit(_Loaded(model: data)),
+      (dataUpload) async {
+        final result = await dataSources.addProduct(event.model.copyWith(
+          images: [
+            dataUpload.location,
+          ],
+        ));
+        result.fold(
+          (error) => emit(_Error(message: error)),
+          (data) => emit(_Loaded(model: data)),
+        );
+      },
     );
   }
 }

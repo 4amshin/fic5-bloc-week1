@@ -6,12 +6,16 @@ class PickImage extends StatelessWidget {
   final void Function()? onCamera;
   final void Function()? onGallery;
   final double radius;
+  final String? imgUrl;
+  final bool isEdit;
   const PickImage({
     Key? key,
     this.child,
     this.onCamera,
     this.onGallery,
     required this.radius,
+    this.imgUrl,
+    this.isEdit = false,
   }) : super(key: key);
 
   @override
@@ -22,16 +26,20 @@ class PickImage extends StatelessWidget {
         CircleAvatar(
           radius: (radius + 1),
           backgroundColor: Colors.grey,
-          child: ClipOval(
-            child: SizedBox(
-              width: (radius * 2),
-              height: (radius * 2),
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: child,
-              ),
-            ),
-          ),
+          backgroundImage:
+              NetworkImage(imgUrl ?? "https://tinyurl.com/default-fic"),
+          child: isEdit
+              ? const SizedBox()
+              : ClipOval(
+                  child: SizedBox(
+                    width: (radius * 2),
+                    height: (radius * 2),
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: child,
+                    ),
+                  ),
+                ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

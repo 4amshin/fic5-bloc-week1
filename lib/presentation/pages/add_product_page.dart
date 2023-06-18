@@ -16,11 +16,11 @@ import 'package:fic_bloc2/presentation/widgets/add_product_page/pick_image.dart'
 import 'package:fic_bloc2/shared/widgets/text_input.dart';
 
 class AddProductPage extends StatefulWidget {
-  final bool? isEdit;
+  final bool isEdit;
   final ProductResponseModel? product;
   const AddProductPage({
     Key? key,
-    this.isEdit,
+    this.isEdit = false,
     this.product,
   }) : super(key: key);
 
@@ -59,7 +59,7 @@ class _AddProductPageState extends State<AddProductPage> {
     priceController = TextEditingController();
     descriptionController = TextEditingController();
 
-    if (widget.isEdit!) {
+    if (widget.isEdit) {
       titleController?.text = widget.product!.title!;
       priceController?.text = widget.product!.price!.toString();
       descriptionController?.text = widget.product!.description!;
@@ -77,10 +77,12 @@ class _AddProductPageState extends State<AddProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<AddProductBloc>();
     return BlocConsumer<AddProductBloc, AddProductState>(
       listener: (context, state) {
         state.maybeWhen(
           loaded: (model) {
+            log(model.toString());
             //display dialog success adding product
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -121,7 +123,7 @@ class _AddProductPageState extends State<AddProductPage> {
           orElse: () {
             return Scaffold(
               appBar: AppBar(
-                title: Text(widget.isEdit! ? "Update Product" : "Add Product"),
+                title: Text(widget.isEdit ? "Update Product" : "Add Product"),
                 leading: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(
@@ -136,6 +138,8 @@ class _AddProductPageState extends State<AddProductPage> {
                   children: [
                     const SizedBox(height: 30),
                     PickImage(
+                      isEdit: widget.isEdit,
+                      imgUrl: widget.product?.images?[0],
                       radius: 90,
                       child: picture != null
                           ? Image.file(File(picture!.path))
@@ -186,15 +190,18 @@ class _AddProductPageState extends State<AddProductPage> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  final model = ProductRequestModel(
+                  final productModel = ProductRequestModel(
                     title: titleController!.text,
                     price: int.parse(priceController!.text),
                     description: descriptionController!.text,
                   );
 
-                  context
-                      .read<AddProductBloc>()
-                      .add(AddProductEvent.addProduct(model));
+                  bloc.add(
+                    AddProductEvent.addProduct(
+                      image: picture!,
+                      model: productModel,
+                    ),
+                  );
                 },
                 backgroundColor: Colors.deepPurple,
                 child: const Text(
