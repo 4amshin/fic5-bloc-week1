@@ -1,4 +1,5 @@
 // import 'package:fic_bloc2/bloc/add_product/add_product_bloc.dart';
+import 'package:fic_bloc2/bloc/cubit/tambah_product_cubit.dart';
 import 'package:fic_bloc2/bloc/login/login_bloc.dart';
 import 'package:fic_bloc2/bloc/products/products_bloc.dart';
 import 'package:fic_bloc2/bloc/register/register_bloc.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AddProductBloc(ProductDataSources()),
+        ),
+        BlocProvider(
+          create: (context) => TambahProductCubit(ProductDataSources()),
         ),
       ],
       child: MaterialApp(

@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage> {
             }
             if (state is ProductsLoaded) {
               log('Total Data: ${state.data.length}');
-              final products = state.data.reversed.toList();
+              // final products = state.data.reversed.toList();
+              final products = state.data;
               return RefreshIndicator(
                 onRefresh: () async {
                   //when refresh update the view by re-execuTE GetProductEvent
